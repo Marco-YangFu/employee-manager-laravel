@@ -1,1 +1,3 @@
-# employee-manager-laravel
+# 従業員管理アプリ（Laravel）
+
+学習用に作成したLaravelベースの従業員管理アプリケーションです。
