@@ -21,7 +21,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view('employees.create');
     }
 
     /**
@@ -29,7 +29,15 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:50',
+            'dept' => 'nullable|string|max:50',
+            'email' => 'required|email|unique:employees,email'
+        ]);
+
+        Employee::create($data);
+
+        return redirect()->route('employees.index')->with('status', '登録しました');
     }
 
     /**
@@ -43,24 +51,33 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Employee $employee)
     {
-        //
+        return view('employees.edit', compact('employee'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Employee $employee)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:50',
+            'dept' => 'nullable|string|max:50',
+            'email' => 'required|email|unique:employees,email,' . $employee->id,
+        ]);
+
+        $employee->update($data);
+
+        return redirect()->route('employees.index')->with('status', '更新しました');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Employee $employee)
     {
-        //
+        $employee->delete();
+        return redirect()->route('employees.index')->with('status', '削除しました');
     }
 }
